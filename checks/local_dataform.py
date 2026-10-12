@@ -48,7 +48,7 @@ def compile_graph(scenario: bool) -> dict:
     cmd = ["npx", "-y", DATAFORM_CLI, "compile", "--json"]
     if scenario:
         cmd.append("--vars=scenario=true")
-    out = subprocess.run(cmd, cwd=ROOT / "dataform", capture_output=True, text=True, check=True).stdout
+    out = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True, check=True).stdout
     graph = json.loads(out)
     if graph.get("graphErrors"):
         sys.exit(f"compile errors: {graph['graphErrors']}")

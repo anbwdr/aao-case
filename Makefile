@@ -49,7 +49,7 @@ oracle: ## Reference KPIs on DuckDB -> checks/golden/
 	uv run checks/oracle.py
 
 compile: ## Compile Dataform (graded and scenario)
-	cd dataform && $(DATAFORM) compile > /dev/null && $(DATAFORM) compile --vars=scenario=true > /dev/null
+	$(DATAFORM) compile > /dev/null && $(DATAFORM) compile --vars=scenario=true > /dev/null
 	@echo "dataform compile ok"
 
 local: ## Compiled Dataform graph on DuckDB (batch 1): assertions + diff vs golden

@@ -21,6 +21,17 @@ project_role() { # project_role MEMBER ROLE
     --condition=None --quiet >/dev/null
 }
 
+# Google-managed service agents are created on first use and take minutes to reach IAM.
+propagation_retry() { # propagation_retry COMMAND...  (6 tries, 30 s apart, then once more loudly)
+  local attempt
+  for attempt in 1 2 3 4 5 6; do
+    "$@" 2>/dev/null && return 0
+    echo "  Not propagated yet, retrying in 30 s ($attempt/6)"
+    sleep 30
+  done
+  "$@"
+}
+
 dataset_role() { # dataset_role DATASET ROLE MEMBER  (BigQuery DCL, idempotent)
   bq --project_id="$PROJECT_ID" --location="$BQ_LOCATION" query --nouse_legacy_sql --quiet \
     "grant \`$2\` on schema \`$PROJECT_ID.$1\` to '$3'" >/dev/null
@@ -97,7 +108,7 @@ iam() {
   local number dataform_agent gcs_agent build_sa me
   number=$(gcloud projects describe "$PROJECT_ID" --format='value(projectNumber)')
   dataform_agent="serviceAccount:service-$number@gcp-sa-dataform.iam.gserviceaccount.com"
-  gcs_agent="serviceAccount:$(gcloud storage service-agent --project="$PROJECT_ID")"
+  gcs_agent="serviceAccount:$(gcloud storage service-agent --project="$PROJECT_ID" | tr -d "[:space:]")"
   build_sa="serviceAccount:$number-compute@developer.gserviceaccount.com"
   me="user:$(gcloud config get-value account 2>/dev/null)"
 
@@ -130,7 +141,7 @@ iam() {
     --member="$me" --role=roles/iam.serviceAccountTokenCreator >/dev/null
 
   # Eventarc direct GCS events are published by the Cloud Storage service agent.
-  project_role "$gcs_agent" roles/pubsub.publisher
+  propagation_retry project_role "$gcs_agent" roles/pubsub.publisher
   # `gcloud run jobs deploy --source` builds with the default compute SA.
   project_role "$build_sa" roles/run.builder
 }
@@ -202,7 +213,7 @@ workflow() {
 trigger() {
   log "Eventarc trigger $TRIGGER"
   exists gcloud eventarc triggers describe "$TRIGGER" --project="$PROJECT_ID" --location="$REGION" ||
-    gcloud eventarc triggers create "$TRIGGER" --project="$PROJECT_ID" --location="$REGION" \
+    propagation_retry gcloud eventarc triggers create "$TRIGGER" --project="$PROJECT_ID" --location="$REGION" \
       --destination-workflow="$WORKFLOW" --destination-workflow-location="$REGION" \
       --event-filters="type=google.cloud.storage.object.v1.finalized" \
       --event-filters="bucket=$BUCKET" \

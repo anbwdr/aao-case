@@ -35,6 +35,13 @@ confirm() { # confirm "question" -> 0 on yes
 
 pause() { read -r -p "  $1 Press Enter when done. " _; }
 
+from_clipboard() { # from_clipboard VAR: fill an empty answer from the clipboard (terminal paste can fail)
+  [[ -n "${!1}" ]] && return
+  local clip
+  clip=$(wl-paste --no-newline 2>/dev/null || xclip -selection clipboard -o 2>/dev/null || true)
+  printf -v "$1" '%s' "$(tr -d '[:space:]' <<<"$clip")"
+}
+
 save() { # save KEY VALUE: upsert into config.env
   touch "$CONFIG"
   if grep -q "^$1=" "$CONFIG"; then
@@ -70,13 +77,13 @@ step() {
 
 # --- 1. gcloud --------------------------------------------------------------
 
-check_gcloud() { has gcloud; }
+check_gcloud() { has gcloud && has bq; }
 run_gcloud() {
-  info "The Google Cloud CLI is in the AUR as google-cloud-cli."
-  if confirm "Install it now with yay?"; then
-    yay -S --needed google-cloud-cli
+  info "The Google Cloud CLI is in the AUR as google-cloud-cli; bq is a separate package, google-cloud-cli-bq."
+  if confirm "Install them now with yay?"; then
+    yay -S --needed google-cloud-cli google-cloud-cli-bq
   else
-    pause "Install gcloud yourself."
+    pause "Install gcloud and bq yourself."
   fi
   hash -r
 }
@@ -125,7 +132,7 @@ run_billing() {
 check_defaults() {
   [[ -n "${PROJECT_ID:-}" ]] &&
     [[ "$(gcloud config get-value project 2>/dev/null)" == "$PROJECT_ID" ]] &&
-    grep -q "^defaultProject: $PROJECT_ID$" "$ROOT/dataform/workflow_settings.yaml" &&
+    grep -q "^defaultProject: $PROJECT_ID$" "$ROOT/workflow_settings.yaml" &&
     grep -q "^REGION=" "$CONFIG" 2>/dev/null
 }
 run_defaults() {
@@ -139,8 +146,8 @@ run_defaults() {
   save PIPELINE_SA "$PIPELINE_SA"
   save GITHUB_SECRET "$GITHUB_SECRET"
   sed -i "s|^defaultProject: .*|defaultProject: $PROJECT_ID|; s|^defaultLocation: .*|defaultLocation: $BQ_LOCATION|" \
-    "$ROOT/dataform/workflow_settings.yaml"
-  info "Updated dataform/workflow_settings.yaml (project and location)."
+    "$ROOT/workflow_settings.yaml"
+  info "Updated workflow_settings.yaml (project and location)."
 }
 
 # --- 3. GitHub ---------------------------------------------------------------
@@ -184,8 +191,9 @@ run_pat() {
   info "  2. Repository access: only ${GITHUB_REPO:-the case repo}"
   info "  3. Permissions: Contents = Read and write (Metadata = Read is added automatically)"
   info "  4. Expiration: past the presentation date"
-  read -r -s -p "  Paste the token (hidden): " token
+  read -r -s -p "  Paste the token (hidden), or copy it and just press Enter: " token
   echo
+  from_clipboard token
   [[ "$token" == github_pat_* ]] || fail "That does not look like a fine-grained token (github_pat_...)."
   gcloud services enable secretmanager.googleapis.com --project="$PROJECT_ID"
   if ! gcloud secrets describe "$GITHUB_SECRET" --project="$PROJECT_ID" >/dev/null 2>&1; then
@@ -203,7 +211,8 @@ run_sheet() {
   info "Service accounts cannot own Drive files, so the output Sheet lives in your Drive."
   info "  1. Open https://sheets.new (signed in as the account you'll use in Tableau)"
   info "  2. Name it 'AAO reporting'"
-  ask url "Paste the Sheet URL"
+  ask url "Paste the Sheet URL (or copy it and just press Enter)"
+  from_clipboard url
   SHEET_ID=$(sed -E 's|.*/spreadsheets/d/([A-Za-z0-9_-]+).*|\1|' <<<"$url")
   [[ "$SHEET_ID" =~ ^[A-Za-z0-9_-]{20,}$ ]] || fail "Could not find a Sheet id in that URL."
   save SHEET_ID "$SHEET_ID"
@@ -239,7 +248,7 @@ run_tableau() {
 
 bold "AAO case – setup wizard"
 
-step "gcloud installed" check_gcloud run_gcloud
+step "gcloud and bq installed" check_gcloud run_gcloud
 step "gcloud logged in" check_login run_login
 step "Application Default Credentials" check_adc run_adc
 step "GCP project${PROJECT_ID:+ ($PROJECT_ID)}" check_project run_project

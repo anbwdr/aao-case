@@ -1,5 +1,5 @@
 # Project id is filled in after infra/wizard.sh; compile works with the placeholder.
-defaultProject: aao-case-project
+defaultProject: aao-case-1012
 defaultLocation: EU
 defaultDataset: analytics
 defaultAssertionDataset: assertions

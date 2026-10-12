@@ -256,10 +256,9 @@ aao-case/
 │   ├── upload.sh             # batch folder + _MANIFEST.json last; --run-now
 │   ├── make_ou_batch.py      # builds O/U 2.5 markets/options CSVs from extra.csv (batch 2)
 │   └── workflow.yaml         # Cloud Workflows definition
-├── dataform/
-│   ├── workflow_settings.yaml   # vars: as_of_date strategy, dataset names
-│   ├── definitions/{raw_sources,base,analytics,reporting}/
-│   └── includes/
+├── workflow_settings.yaml    # Dataform project at the repo root (Dataform compiles from the git root)
+├── definitions/{raw_sources,base,analytics,reporting,assertions}/
+├── includes/
 ├── publish/                  # Cloud Run job: reporting.* → Google Sheet (Python, gspread)
 ├── malloy/                   # aao.malloy semantic model + views; publisher.config.json
 ├── checks/                   # oracle.py, golden/, verify.py

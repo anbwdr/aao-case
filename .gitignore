@@ -11,7 +11,7 @@ node_modules/
 __pycache__/
 *.pyc
 .df-credentials.json
-dataform/.df-credentials.json
+.df-credentials.json
 
 # Local secrets
 .env

@@ -16,7 +16,6 @@ jobs:
         with:
           node-version: 22
       - name: Dataform compile (graded and scenario)
-        working-directory: dataform
         run: |
           npx -y @dataform/cli@3.0.71 compile
           npx -y @dataform/cli@3.0.71 compile --vars=scenario=true

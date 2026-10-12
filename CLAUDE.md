@@ -21,7 +21,9 @@ If `NEXT_SESSION.md` exists, it is the handover from the previous session: start
 - Money is NUMERIC in BigQuery so sums are exact.
 - In reporting, amounts that don't apply to a market's status are NULL, not 0 (e.g. `worst_case` on a settled market).
 
-## Layers (Dataform, `dataform/definitions/`)
+## Layers (Dataform, `definitions/`)
+
+The Dataform project (`workflow_settings.yaml`, `definitions/`, `includes/`) stays at the repo root: Dataform compiles from the root of the connected git repo and has no subfolder setting.
 
 | Folder | Dataset | Contract |
 |---|---|---|

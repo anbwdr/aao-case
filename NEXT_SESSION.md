@@ -22,10 +22,10 @@ Handover written 2026-10-11. **Claude: read this and `CLAUDE.md` first, then gui
 
 | Wizard step | Watch for |
 |---|---|
-| gcloud install | `yay -S google-cloud-cli` (AUR). Re-open the shell if `gcloud` isn't found |
+| gcloud install | `yay -S google-cloud-cli google-cloud-cli-bq` (AUR; `bq` is a separate package). Re-open the shell if `gcloud` isn't found |
 | Free trial + project | The trial signup happens in the browser. Project ids are globally unique: if creation fails, pick another id |
 | Billing | Pick the trial billing account |
-| Defaults | Writes `infra/config.env` and sets `defaultProject` in `dataform/workflow_settings.yaml`. Default region `europe-west1`, BQ `EU` |
+| Defaults | Writes `infra/config.env` and sets `defaultProject` in `workflow_settings.yaml`. Default region `europe-west1`, BQ `EU` |
 | GitHub | `gh auth login --web`. The repo step commits (it asks) and pushes `main`. Check the push included the updated `workflow_settings.yaml` |
 | Token | Fine-grained, only the case repo, Contents read/write. Stored in Secret Manager as `dataform-github-token` |
 | Sheet | Create it at sheets.new as the Google account Tableau will use, then paste the URL |
@@ -89,7 +89,7 @@ Re-running `make upload` makes a new batch (new `batch_id`). That's fine: bets m
 ### 8. KPI review (👤 step 9, ~20 min)
 
 Walk the user through, against PLAN.md §3:
-- `dataform/definitions/analytics/fct_bets.sqlx` (bet earnings)
+- `definitions/analytics/fct_bets.sqlx` (bet earnings)
 - `fct_market_outcome.sqlx` (earnings if realised)
 - `fct_market.sqlx` (worst/best, NULL conventions)
 - `reporting/rpt_option_cumulative.sqlx` (T2)

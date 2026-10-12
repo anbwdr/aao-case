@@ -75,7 +75,7 @@ Definitions in PLAN.md §3. Reproduced independently by `checks/oracle.py`, the 
 |---|---|
 | `infra/` | `wizard.sh` (human steps), `setup.sh` (idempotent gcloud), `env.sh` (resource names) |
 | `ingest/` | `upload.sh`, `prepare_batch.py`, `make_ou_batch.py`, `workflow.yaml` |
-| `dataform/` | Transformations and assertions |
+| `workflow_settings.yaml`, `definitions/`, `includes/` | Dataform project (at the repo root: Dataform compiles from the root of the connected git repo) |
 | `publish/` | Cloud Run job: `reporting.*` → Google Sheet |
 | `malloy/` | Semantic model (`aao/aao.malloy`), Publisher config generator, local check |
 | `checks/` | Oracle, golden files, local Dataform runner, cloud verify |
