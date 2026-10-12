@@ -1,0 +1,27 @@
+config {
+  type: "view",
+  schema: constants.dataset("base"),
+  description: "Options (selections) per market, latest version per id, typed.",
+  columns: {
+    option_id: "Option id",
+    market_id: "Market the option belongs to",
+    option_name: "1, X, 2 (3-way); Over, Under (O/U 2.5)",
+    latest_odds: "Latest offered odds",
+  },
+  assertions: {
+    uniqueKeys: [["option_id"], ["market_id", "option_name"]],
+    nonNull: ["option_id", "market_id", "option_name"],
+    rowConditions: [
+      `option_name in ${sql.inList(constants.OPTION_NAMES)}`,
+      "latest_odds >= 1",
+    ],
+  },
+}
+
+select
+    cast(id as int64) as option_id,
+    cast(market_id as int64) as market_id,
+    name as option_name,
+    cast(latest_odds as numeric) as latest_odds
+from ${ref("raw", "options")}
+${sql.latestPerKey("id")}

@@ -1,0 +1,16 @@
+config {
+  type: "declaration",
+  schema: "raw",
+  name: "bets",
+  description: "Landed bets.csv. Append-only, all columns STRING.",
+  columns: {
+    id: "Bet id",
+    date: "Bet date, YYYY-MM-DD",
+    option_id: "Option the bet is on",
+    odds: "Decimal odds taken",
+    amount: "Stake",
+    _batch_id: "Batch folder name (UTC timestamp, sortable), set by the Workflow",
+    _ingested_at: "Load timestamp, set by the Workflow",
+    _source_file: "gs:// URI of the landed file",
+  }
+}

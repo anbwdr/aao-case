@@ -1,0 +1,32 @@
+config {
+  type: "table",
+  schema: constants.dataset("analytics"),
+  description: "Calendar from the first bet date to the last fixture date. as_of_date is the last bet date in the data, never current_date().",
+  columns: {
+    date_day: "Calendar date",
+    as_of_date: "Reporting date: max bet date",
+    is_after_as_of: "True for dates after as_of_date (the future, from the data's point of view)",
+  },
+  assertions: {
+    uniqueKey: ["date_day"],
+  },
+}
+
+with bounds as (
+    select
+        (select min(bet_date) from ${ref("base_bets")}) as first_date,
+        (select max(bet_date) from ${ref("base_bets")}) as as_of_date,
+        (select max(date(starting_time)) from ${ref("base_fixtures")}) as last_fixture_date
+)
+
+select
+    date_day,
+    extract(year from date_day) as year,
+    extract(month from date_day) as month,
+    format_date('%Y-%m', date_day) as year_month,
+    extract(isoweek from date_day) as iso_week,
+    format_date('%a', date_day) as day_name,
+    bounds.as_of_date,
+    date_day > bounds.as_of_date as is_after_as_of
+from bounds,
+    unnest(generate_date_array(bounds.first_date, greatest(bounds.as_of_date, bounds.last_fixture_date))) as date_day

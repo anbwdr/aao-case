@@ -1,0 +1,32 @@
+config {
+  type: "incremental",
+  schema: constants.dataset("base"),
+  description: "Bets, typed. Incremental on _batch_id: bets are append-only in the source, so only new batches are read and merged on bet_id (a re-uploaded batch updates, never duplicates). Money is NUMERIC so sums are exact.",
+  uniqueKey: ["bet_id"],
+  partitionBy: "bet_date",
+  clusterBy: ["option_id"],
+  columns: {
+    bet_id: "Bet id",
+    bet_date: "Date the bet was placed",
+    option_id: "Option the bet is on",
+    odds: "Decimal odds taken",
+    amount: "Stake",
+    _batch_id: "Batch the latest version of the bet came from",
+  },
+  assertions: {
+    uniqueKey: ["bet_id"],
+    nonNull: ["bet_id", "bet_date", "option_id", "odds", "amount"],
+    rowConditions: ["odds >= 1", "amount > 0"],
+  },
+}
+
+select
+    cast(id as int64) as bet_id,
+    cast(date as date) as bet_date,
+    cast(option_id as int64) as option_id,
+    cast(odds as numeric) as odds,
+    cast(amount as numeric) as amount,
+    _batch_id
+from ${ref("raw", "bets")}
+${when(incremental(), `where _batch_id > (select max(_batch_id) from ${self()})`)}
+${sql.latestPerKey("id")}

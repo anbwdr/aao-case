@@ -1,0 +1,24 @@
+config {
+  type: "table",
+  schema: constants.dataset("reporting"),
+  description: "One row: the KPI tiles (T4 plus margin). Summing worst/best case per market is valid only while markets on the same fixture are independent (one market per fixture today, see PLAN.md §10).",
+  columns: {
+    as_of_date: "Last bet date in the data",
+    settled_earnings: "Σ AAO earnings on settled markets",
+    settled_stake: "Σ stake on settled markets",
+    settled_margin: "settled_earnings / settled_stake",
+    open_bets: "Σ stake on open markets",
+    worst_case_future: "Σ over open markets of the worst outcome for AAO",
+    best_case_future: "Σ over open markets of the best outcome for AAO",
+  },
+}
+
+select
+    (select max(as_of_date) from ${ref("dim_date")}) as as_of_date,
+    coalesce(sum(settled_earnings), 0) as settled_earnings,
+    coalesce(sum(if(is_settled, total_stake, null)), 0) as settled_stake,
+    safe_divide(sum(settled_earnings), sum(if(is_settled, total_stake, null))) as settled_margin,
+    coalesce(sum(open_bets), 0) as open_bets,
+    coalesce(sum(worst_case), 0) as worst_case_future,
+    coalesce(sum(best_case), 0) as best_case_future
+from ${ref("rpt_market_summary")}

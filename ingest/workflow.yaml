@@ -1,0 +1,267 @@
+# Cloud Workflows "aao-pipeline" (PLAN.md §4). Deployed by infra/setup.sh.
+#
+# Eventarc calls this for every object finalized in the landing bucket. Only a batch's
+# _MANIFEST.json (uploaded last) starts a run:
+#   1. ignore anything else          4. assert raw row counts == manifest, record the manifest
+#   2. read the manifest             5. Dataform: compile main + invoke, wait
+#   3. per file: load to a STRING    6. Cloud Run job "publish" (skipped for a scenario batch)
+#      staging table, append to raw  7. log a summary
+#
+# A scenario manifest ("scenario": true) lands in raw_scenario and runs Dataform with
+# vars.scenario = "true", which writes the *_scenario datasets only.
+# Env vars (set at deploy): REGION, BQ_LOCATION, DATAFORM_REPO, DATAFORM_SA, PUBLISH_JOB.
+
+main:
+  params: [event]
+  steps:
+    - init:
+        assign:
+          - project: ${sys.get_env("GOOGLE_CLOUD_PROJECT_ID")}
+          - region: ${sys.get_env("REGION")}
+          - bq_location: ${sys.get_env("BQ_LOCATION")}
+          - dataform_repo: ${sys.get_env("DATAFORM_REPO")}
+          - dataform_sa: ${sys.get_env("DATAFORM_SA")}
+          - publish_job: ${sys.get_env("PUBLISH_JOB")}
+          - bucket: ${event.data.bucket}
+          - object: ${event.data.name}
+          # upload.sh --run-now tags its manifest and starts the run itself, with manual: true.
+          - trigger: ${default(map.get(event, ["data", "metadata", "trigger"]), "")}
+          - manual: ${default(map.get(event, "manual"), false)}
+
+    # 1. Only the manifest starts a run.
+    - filter:
+        switch:
+          - condition: ${not text.match_regex(object, "(^|/)_MANIFEST\\.json$")}
+            return: ${"ignored " + object}
+          - condition: ${trigger == "manual" and not manual}
+            return: ${"ignored " + object + " (started by upload.sh --run-now)"}
+
+    # 2. Read the manifest.
+    - read_manifest:
+        call: googleapis.storage.v1.objects.get
+        args:
+          bucket: ${bucket}
+          object: ${text.url_encode(object)}
+          alt: media
+        result: manifest
+    - batch_vars:
+        assign:
+          - batch_id: ${manifest.batch_id}
+          - prefix: ${text.replace_all(object, "_MANIFEST.json", "")}
+          - scenario: ${default(map.get(manifest, "scenario"), false)}
+          - raw_dataset: raw
+          - scenario_var: "false"
+          - manifest_values: ""
+          - loaded: []
+    - scenario_vars:
+        switch:
+          - condition: ${scenario}
+            assign:
+              - raw_dataset: raw_scenario
+              - scenario_var: "true"
+    - log_start:
+        call: sys.log
+        args:
+          severity: INFO
+          json:
+            message: batch started
+            batch_id: ${batch_id}
+            scenario: ${scenario}
+            files: ${len(manifest.files)}
+
+    # Idempotent: a manifest that was already recorded is never loaded twice.
+    - check_already_loaded:
+        call: googleapis.bigquery.v2.jobs.query
+        args:
+          projectId: ${project}
+          body:
+            useLegacySql: false
+            location: ${bq_location}
+            query: ${"select count(*) from `" + raw_dataset + ".batch_manifest` where batch_id = '" + batch_id + "'"}
+        result: already
+    - skip_if_loaded:
+        switch:
+          - condition: ${int(already.rows[0].f[0].v) > 0}
+            return: ${"batch " + batch_id + " already loaded, nothing to do"}
+
+    # 3 + 4. Load every file, then check its row count.
+    - load_files:
+        for:
+          value: f
+          in: ${manifest.files}
+          steps:
+            - file_vars:
+                assign:
+                  - source_uri: ${"gs://" + bucket + "/" + prefix + f.file}
+                  - staging: ${"raw_staging." + f.table + "_" + batch_id}
+                  - target: ${raw_dataset + "." + f.table}
+                  - fields: []
+                  - column_defs: ""
+                  - column_list: ""
+            - build_columns:
+                for:
+                  value: col
+                  in: ${f.columns}
+                  steps:
+                    - add_column:
+                        assign:
+                          - field:
+                              name: ${col}
+                              type: STRING
+                          - fields: ${list.concat(fields, field)}
+                          - column_defs: ${column_defs + "`" + col + "` string, "}
+                          - column_list: ${column_list + "`" + col + "`, "}
+            - load_staging:
+                call: googleapis.bigquery.v2.jobs.insert
+                args:
+                  projectId: ${project}
+                  body:
+                    jobReference:
+                      location: ${bq_location}
+                    configuration:
+                      load:
+                        sourceUris:
+                          - ${source_uri}
+                        destinationTable:
+                          projectId: ${project}
+                          datasetId: raw_staging
+                          tableId: ${f.table + "_" + batch_id}
+                        schema:
+                          fields: ${fields}
+                        sourceFormat: CSV
+                        skipLeadingRows: 1
+                        allowQuotedNewlines: true
+                        writeDisposition: WRITE_TRUNCATE
+            # Append to raw with metadata columns. Deleting the batch first makes a retry safe.
+            - build_append_sql:
+                assign:
+                  - sql: ${"create table if not exists `" + target + "` (" + column_defs + "_batch_id string, _ingested_at timestamp, _source_file string); "}
+                  - sql: ${sql + "delete from `" + target + "` where _batch_id = '" + batch_id + "'; "}
+                  - sql: ${sql + "insert into `" + target + "` (" + column_list + "_batch_id, _ingested_at, _source_file) "}
+                  - sql: ${sql + "select " + column_list + "'" + batch_id + "', current_timestamp(), '" + source_uri + "' from `" + staging + "`; "}
+                  - sql: ${sql + "drop table `" + staging + "`;"}
+            - append_raw:
+                call: googleapis.bigquery.v2.jobs.insert
+                args:
+                  projectId: ${project}
+                  body:
+                    jobReference:
+                      location: ${bq_location}
+                    configuration:
+                      query:
+                        useLegacySql: false
+                        query: ${sql}
+            - count_raw:
+                call: googleapis.bigquery.v2.jobs.query
+                args:
+                  projectId: ${project}
+                  body:
+                    useLegacySql: false
+                    location: ${bq_location}
+                    query: ${"select count(*) from `" + target + "` where _batch_id = '" + batch_id + "'"}
+                result: counted
+            - assert_count:
+                switch:
+                  - condition: ${int(counted.rows[0].f[0].v) != f.rows}
+                    raise: '${target + " landed " + counted.rows[0].f[0].v + " rows, manifest says " + string(f.rows)}'
+            - remember:
+                assign:
+                  - manifest_values: ${manifest_values + "('" + batch_id + "', '" + f.table + "', " + string(f.rows) + ", '" + source_uri + "', current_timestamp()),"}
+                  - loaded: ${list.concat(loaded, f.table + " " + string(f.rows))}
+
+    # Recorded only after every file landed and matched, so a failed batch can simply be re-run.
+    - record_manifest:
+        call: googleapis.bigquery.v2.jobs.query
+        args:
+          projectId: ${project}
+          body:
+            useLegacySql: false
+            location: ${bq_location}
+            query: ${"insert into `" + raw_dataset + ".batch_manifest` (batch_id, table_name, row_count, source_uri, loaded_at) values " + text.substring(manifest_values, 0, len(manifest_values) - 1)}
+
+    # 5. Dataform: compile main (with the scenario var) and run everything, assertions included.
+    - dataform_compile:
+        call: http.post
+        args:
+          url: ${"https://dataform.googleapis.com/v1beta1/" + dataform_repo + "/compilationResults"}
+          auth:
+            type: OAuth2
+          body:
+            gitCommitish: main
+            codeCompilationConfig:
+              defaultDatabase: ${project}
+              defaultLocation: ${bq_location}
+              vars:
+                scenario: ${scenario_var}
+        result: compilation
+    - check_compilation:
+        switch:
+          - condition: ${"compilationErrors" in compilation.body}
+            raise: ${compilation.body.compilationErrors}
+    - dataform_invoke:
+        call: http.post
+        args:
+          url: ${"https://dataform.googleapis.com/v1beta1/" + dataform_repo + "/workflowInvocations"}
+          auth:
+            type: OAuth2
+          body:
+            compilationResult: ${compilation.body.name}
+            invocationConfig:
+              serviceAccount: ${dataform_sa}
+        result: invocation
+    - dataform_poll:
+        call: http.get
+        args:
+          url: ${"https://dataform.googleapis.com/v1beta1/" + invocation.body.name}
+          auth:
+            type: OAuth2
+        result: invocation_state
+    - dataform_check:
+        switch:
+          - condition: ${invocation_state.body.state == "RUNNING" or invocation_state.body.state == "CANCELING"}
+            next: dataform_wait
+          - condition: ${invocation_state.body.state != "SUCCEEDED"}
+            raise: ${"Dataform " + invocation.body.name + " ended " + invocation_state.body.state + " (see the Dataform UI for the failing action or assertion)"}
+        next: publish_or_skip
+    - dataform_wait:
+        call: sys.sleep
+        args:
+          seconds: 15
+        next: dataform_poll
+
+    # 6. Publish reporting.* to the Google Sheet. The scenario never touches the Sheet.
+    - publish_or_skip:
+        switch:
+          - condition: ${scenario}
+            assign:
+              - published: skipped (scenario)
+            next: summary
+    - publish:
+        call: googleapis.run.v1.namespaces.jobs.run
+        args:
+          name: ${"namespaces/" + project + "/jobs/" + publish_job}
+          location: ${region}
+        result: publish_execution
+    - mark_published:
+        assign:
+          - published: done
+
+    # 7. Summary.
+    - summary:
+        call: sys.log
+        args:
+          severity: INFO
+          json:
+            message: batch done
+            batch_id: ${batch_id}
+            scenario: ${scenario}
+            loaded: ${loaded}
+            dataform: ${invocation.body.name}
+            published: ${published}
+    - done:
+        return:
+          batch_id: ${batch_id}
+          scenario: ${scenario}
+          loaded: ${loaded}
+          dataform: ${invocation.body.name}
+          published: ${published}

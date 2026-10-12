@@ -1,0 +1,58 @@
+config {
+  type: "view",
+  schema: constants.dataset("base"),
+  description: "Actual match results mapped to case fixtures on (home_team, away_team), never on date: 108 fixtures were played on a different date than scheduled. Unmapped rows are kept with a NULL fixture_id so the assertions fail loudly.",
+  columns: {
+    fixture_id: "Case fixture id (NULL = could not be mapped, assertion fails)",
+    home_team: "Home team, mapped to case naming",
+    away_team: "Away team, mapped to case naming",
+    actual_match_date: "Date the match was actually played",
+    home_goals: "Full-time home goals",
+    away_goals: "Full-time away goals",
+    full_time_result: "H, D, A",
+  },
+  assertions: {
+    uniqueKey: ["fixture_id"],
+    nonNull: ["fixture_id", "actual_match_date", "home_goals", "away_goals", "full_time_result"],
+    rowConditions: [
+      "full_time_result = case sign(home_goals - away_goals) when 1 then 'H' when 0 then 'D' else 'A' end",
+    ],
+  },
+}
+
+with source as (
+    select HomeTeam, AwayTeam, Date, FTHG, FTAG, FTR, _batch_id, _ingested_at
+    from ${ref("raw", "match_results")}
+    ${constants.SCENARIO ? `
+    union all
+    select HomeTeam, AwayTeam, Date, FTHG, FTAG, FTR, _batch_id, _ingested_at
+    from ${ref("raw_scenario", "match_results")}` : ""}
+),
+
+latest as (
+    select *
+    from source
+    ${sql.latestPerKey("HomeTeam, AwayTeam")}
+),
+
+mapped as (
+    select
+        coalesce(home_map.fixture_team_name, latest.HomeTeam) as home_team,
+        coalesce(away_map.fixture_team_name, latest.AwayTeam) as away_team,
+        parse_date('%d/%m/%Y', latest.Date) as actual_match_date,
+        cast(latest.FTHG as int64) as home_goals,
+        cast(latest.FTAG as int64) as away_goals,
+        latest.FTR as full_time_result
+    from latest
+    left join ${ref("base_team_name_map")} as home_map
+        on latest.HomeTeam = home_map.source_team_name
+    left join ${ref("base_team_name_map")} as away_map
+        on latest.AwayTeam = away_map.source_team_name
+)
+
+select
+    fixtures.fixture_id,
+    mapped.*
+from mapped
+left join ${ref("base_fixtures")} as fixtures
+    using (home_team, away_team)

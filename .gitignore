@@ -1,0 +1,28 @@
+# Case material that should not be public
+Instruction.docx
+job_description.md
+
+# 49 MB, near GitHub's limit: copy it into data/ manually (see README)
+data/bets.csv
+
+# Tooling
+node_modules/
+.venv/
+__pycache__/
+*.pyc
+.df-credentials.json
+dataform/.df-credentials.json
+
+# Local secrets
+.env
+*.key.json
+
+# Wizard answers (project id, sheet id, ...), read by infra/setup.sh
+infra/config.env
+
+# Malloy: generated config, scenario copy, Publisher state, check deps
+malloy/node_modules/
+malloy/publisher.config.json
+malloy/.scenario/
+malloy/publisher_data/
+checks/.marts/

@@ -1,0 +1,48 @@
+config {
+  type: "table",
+  schema: constants.dataset("analytics"),
+  description: "One row per bet, seen from AAO's side. settled_earnings = amount - (odds * amount if the bet won else 0); NULL while the market is open.",
+  partitionBy: "bet_date",
+  clusterBy: ["market_id"],
+  columns: {
+    bet_id: "Bet id",
+    bet_date: "Date the bet was placed",
+    option_id: "Option",
+    market_id: "Market",
+    fixture_id: "Fixture",
+    odds: "Decimal odds taken",
+    amount: "Stake",
+    potential_payout: "odds * amount: what AAO pays if the option wins",
+    is_settled: "Market is settled",
+    is_winning_bet: "Bet won (NULL while open)",
+    settled_earnings: "AAO earnings on the bet (NULL while open)",
+    open_stake: "Stake on an open market (NULL once settled)",
+  },
+  assertions: {
+    uniqueKey: ["bet_id"],
+    nonNull: ["market_id", "fixture_id"],
+  },
+}
+
+select
+    bets.bet_id,
+    bets.bet_date,
+    bets.option_id,
+    options.market_id,
+    markets.fixture_id,
+    bets.odds,
+    bets.amount,
+    bets.odds * bets.amount as potential_payout,
+    markets.is_settled,
+    if(markets.is_settled, bets.option_id = markets.result_option_id, null) as is_winning_bet,
+    if(
+        markets.is_settled,
+        bets.amount - if(bets.option_id = markets.result_option_id, bets.odds * bets.amount, 0),
+        null
+    ) as settled_earnings,
+    if(markets.is_settled, null, bets.amount) as open_stake
+from ${ref("base_bets")} as bets
+inner join ${ref("base_options")} as options
+    using (option_id)
+inner join ${ref("base_markets")} as markets
+    using (market_id)

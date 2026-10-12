@@ -1,0 +1,14 @@
+config {
+  type: "assertion",
+  description: "Cross-check: the result derived from match_results equals the source system's result_option_id wherever the source says settled. Outside a scenario push the 3-way settled sets must also be identical (batch 1 covers exactly the 70 settled fixtures).",
+}
+
+select
+    market_id,
+    market_name,
+    result_option_id as derived_result_option_id,
+    source_result_option_id
+from ${ref("base_markets")}
+where
+    (source_result_option_id is not null and result_option_id is distinct from source_result_option_id)
+    ${constants.SCENARIO ? "" : "or (market_name = '3-way' and is_settled and source_result_option_id is null)"}

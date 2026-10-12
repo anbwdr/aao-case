@@ -1,0 +1,23 @@
+config {
+  type: "table",
+  schema: constants.dataset("reporting"),
+  description: "One row per market the source system reports as settled: the source's result vs the actual result derived from match_results.",
+  columns: {
+    aao_result: "Winning option according to AAO's source system",
+    actual_result: "Winning option derived from the actual match result",
+    match_flag: "True when both agree",
+  },
+  assertions: {
+    uniqueKey: ["market_id"],
+  },
+}
+
+select
+    markets.market_id,
+    source_options.option_name as aao_result,
+    markets.result_option_name as actual_result,
+    coalesce(markets.source_result_option_id = markets.result_option_id, false) as match_flag
+from ${ref("dim_market")} as markets
+left join ${ref("dim_option")} as source_options
+    on markets.source_result_option_id = source_options.option_id
+where markets.source_result_option_id is not null

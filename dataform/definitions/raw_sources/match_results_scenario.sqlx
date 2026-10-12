@@ -1,0 +1,6 @@
+config {
+  type: "declaration",
+  schema: "raw_scenario",
+  name: "match_results",
+  description: "Scenario push only (PLAN.md §4.1): the remaining match results. Same columns as raw.match_results. Only referenced when vars.scenario = true.",
+}

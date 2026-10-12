@@ -1,0 +1,45 @@
+config {
+  type: "table",
+  schema: constants.dataset("analytics"),
+  description: "One row per market and option: what AAO earns if that option is the outcome, given all bets to date. earnings_if_realised = market stake - payout on the option. Worst/best case per market = min/max over its options.",
+  columns: {
+    market_id: "Market",
+    option_id: "Option",
+    is_settled: "Market is settled",
+    is_actual_outcome: "This option won",
+    market_stake: "All stakes on the market",
+    option_payout: "Sum of odds * amount on this option",
+    earnings_if_realised: "market_stake - option_payout",
+  },
+  assertions: {
+    uniqueKey: ["option_id"],
+  },
+}
+
+with market_stake as (
+    select market_id, sum(stake) as market_stake
+    from ${ref("fct_option_daily")}
+    group by market_id
+),
+
+option_payout as (
+    select option_id, sum(potential_payout) as option_payout
+    from ${ref("fct_option_daily")}
+    group by option_id
+)
+
+select
+    options.market_id,
+    options.option_id,
+    markets.is_settled,
+    options.is_actual_outcome,
+    coalesce(market_stake.market_stake, 0) as market_stake,
+    coalesce(option_payout.option_payout, 0) as option_payout,
+    coalesce(market_stake.market_stake, 0) - coalesce(option_payout.option_payout, 0) as earnings_if_realised
+from ${ref("dim_option")} as options
+inner join ${ref("dim_market")} as markets
+    using (market_id)
+left join market_stake
+    using (market_id)
+left join option_payout
+    using (option_id)

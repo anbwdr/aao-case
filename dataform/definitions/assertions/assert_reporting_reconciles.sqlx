@@ -1,0 +1,62 @@
+config {
+  type: "assertion",
+  description: "Reconciliation across layers: stake raw -> base -> reporting, per-market settled earnings sum to the KPI tile, and the last point of each option-cumulative line equals the market outcome table. Returns failing checks only.",
+}
+
+with raw_stake as (
+    select sum(cast(amount as numeric)) as stake
+    from (
+        select id, amount
+        from ${ref("raw", "bets")}
+        ${sql.latestPerKey("id")}
+    )
+),
+
+checks as (
+    select
+        'stake raw = rpt_market_summary' as check_name,
+        (select stake from raw_stake) as expected,
+        (select sum(total_stake) from ${ref("rpt_market_summary")}) as actual
+
+    union all
+
+    select
+        'stake base_bets = rpt_market_summary',
+        (select sum(amount) from ${ref("base_bets")}),
+        (select sum(total_stake) from ${ref("rpt_market_summary")})
+
+    union all
+
+    select
+        'settled earnings: fct_bets = rpt_kpi_totals',
+        (select coalesce(sum(settled_earnings), 0) from ${ref("fct_bets")}),
+        (select settled_earnings from ${ref("rpt_kpi_totals")})
+
+    union all
+
+    select
+        'open bets: fct_bets = rpt_kpi_totals',
+        (select coalesce(sum(open_stake), 0) from ${ref("fct_bets")}),
+        (select open_bets from ${ref("rpt_kpi_totals")})
+
+    union all
+
+    select
+        'option-cumulative end points <> fct_market_outcome (mismatching options)',
+        0,
+        (
+            select count(*)
+            from ${ref("fct_market_outcome")} as outcomes
+            inner join (
+                select option_id, cum_earnings_if_realised
+                from ${ref("rpt_option_cumulative")}
+                qualify bet_date = max(bet_date) over (partition by option_id)
+            ) as end_points
+                using (option_id)
+            where outcomes.earnings_if_realised <> end_points.cum_earnings_if_realised
+        )
+)
+
+select *
+from checks
+where expected is distinct from actual

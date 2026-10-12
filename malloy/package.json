@@ -1,0 +1,13 @@
+{
+  "name": "aao-malloy-check",
+  "private": true,
+  "type": "module",
+  "description": "Runs malloy/aao/aao.malloy on DuckDB (marts exported by checks/local_dataform.py) and diffs it against checks/golden/.",
+  "scripts": {
+    "check": "node check.mjs"
+  },
+  "devDependencies": {
+    "@malloydata/db-duckdb": "0.0.435",
+    "@malloydata/malloy": "0.0.435"
+  }
+}

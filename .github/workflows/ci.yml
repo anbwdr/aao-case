@@ -1,0 +1,26 @@
+# Cheap checks that need neither GCP nor bets.csv (not in the repo).
+# The full definition of done is `make verify`, run locally with the data present.
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Dataform compile (graded and scenario)
+        working-directory: dataform
+        run: |
+          npx -y @dataform/cli@3.0.71 compile
+          npx -y @dataform/cli@3.0.71 compile --vars=scenario=true
+      - name: shellcheck
+        run: shellcheck infra/*.sh ingest/*.sh malloy/*.sh
+      - name: Workflow YAML parses
+        run: python3 -c "import yaml; yaml.safe_load(open('ingest/workflow.yaml'))"

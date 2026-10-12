@@ -1,0 +1,61 @@
+config {
+  type: "table",
+  schema: constants.dataset("analytics"),
+  description: "One row per market: the KPI building blocks (PLAN.md §3), additive across markets. Amounts that do not apply to the market's status are NULL: settled_* while open, open_bets/worst_case/best_case once settled. Summing worst/best across markets is valid only while markets on one fixture are independent (PLAN.md §10).",
+  columns: {
+    market_id: "Market",
+    fixture_id: "Fixture",
+    is_settled: "Market is settled",
+    bet_count: "Bets on the market",
+    total_stake: "All stakes on the market",
+    settled_stake: "Stake on the market once settled",
+    settled_earnings: "AAO earnings once settled (0 when no bets)",
+    open_bets: "Stake on the market while open",
+    worst_case: "While open: min over options of earnings if realised",
+    best_case: "While open: max over options of earnings if realised",
+  },
+  assertions: {
+    uniqueKey: ["market_id"],
+    rowConditions: [
+      "worst_case <= best_case",
+      "is_settled = (settled_earnings is not null)",
+      "is_settled = (open_bets is null)",
+    ],
+  },
+}
+
+with bets as (
+    select
+        market_id,
+        count(*) as bet_count,
+        sum(amount) as total_stake,
+        sum(settled_earnings) as settled_earnings
+    from ${ref("fct_bets")}
+    group by market_id
+),
+
+outcomes as (
+    select
+        market_id,
+        min(earnings_if_realised) as worst_case,
+        max(earnings_if_realised) as best_case
+    from ${ref("fct_market_outcome")}
+    group by market_id
+)
+
+select
+    markets.market_id,
+    markets.fixture_id,
+    markets.is_settled,
+    coalesce(bets.bet_count, 0) as bet_count,
+    coalesce(bets.total_stake, 0) as total_stake,
+    if(markets.is_settled, coalesce(bets.total_stake, 0), null) as settled_stake,
+    if(markets.is_settled, coalesce(bets.settled_earnings, 0), null) as settled_earnings,
+    if(markets.is_settled, null, coalesce(bets.total_stake, 0)) as open_bets,
+    if(markets.is_settled, null, outcomes.worst_case) as worst_case,
+    if(markets.is_settled, null, outcomes.best_case) as best_case
+from ${ref("dim_market")} as markets
+left join bets
+    using (market_id)
+left join outcomes
+    using (market_id)

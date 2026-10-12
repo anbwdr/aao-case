@@ -1,0 +1,31 @@
+config {
+  type: "assertion",
+  description: "Referential integrity bet -> option -> market -> fixture, and every result option belongs to its own market.",
+}
+
+select 'bet -> option' as relationship, bets.bet_id as orphan_id
+from ${ref("base_bets")} as bets
+left join ${ref("base_options")} as options using (option_id)
+where options.option_id is null
+
+union all
+
+select 'option -> market', options.option_id
+from ${ref("base_options")} as options
+left join ${ref("base_markets")} as markets using (market_id)
+where markets.market_id is null
+
+union all
+
+select 'market -> fixture', markets.market_id
+from ${ref("base_markets")} as markets
+left join ${ref("base_fixtures")} as fixtures using (fixture_id)
+where fixtures.fixture_id is null
+
+union all
+
+select 'result option -> own market', markets.market_id
+from ${ref("base_markets")} as markets
+inner join ${ref("base_options")} as options
+    on markets.result_option_id = options.option_id
+where options.market_id <> markets.market_id

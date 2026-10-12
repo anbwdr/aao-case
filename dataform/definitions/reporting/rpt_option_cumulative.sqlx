@@ -1,0 +1,74 @@
+config {
+  type: "table",
+  schema: constants.dataset("reporting"),
+  description: "Market page (T2, T3): cumulative earnings for AAO if each option is realised, by bet date. Dense from the first to the last bet date of each market, so every option has a point on every date.",
+  columns: {
+    cum_stake_market: "Stakes on the whole market up to and including bet_date",
+    cum_payout_option: "odds * amount on this option up to and including bet_date",
+    cum_earnings_if_realised: "cum_stake_market - cum_payout_option",
+    is_actual_outcome: "This option won (highlight it)",
+  },
+  assertions: {
+    uniqueKeys: [["option_id", "bet_date"]],
+  },
+}
+
+with bounds as (
+    select market_id, min(bet_date) as first_bet_date, max(bet_date) as last_bet_date
+    from ${ref("fct_option_daily")}
+    group by market_id
+),
+
+spine as (
+    select
+        bounds.market_id,
+        options.option_id,
+        options.option_name,
+        options.is_actual_outcome,
+        bet_date
+    from bounds
+    inner join ${ref("dim_option")} as options
+        using (market_id)
+    cross join unnest(generate_date_array(bounds.first_bet_date, bounds.last_bet_date)) as bet_date
+),
+
+market_daily as (
+    select market_id, bet_date, sum(stake) as stake
+    from ${ref("fct_option_daily")}
+    group by market_id, bet_date
+),
+
+cumulative as (
+    select
+        spine.market_id,
+        spine.option_id,
+        spine.option_name,
+        spine.bet_date,
+        spine.is_actual_outcome,
+        sum(coalesce(market_daily.stake, 0)) over running as cum_stake_market,
+        sum(coalesce(option_daily.potential_payout, 0)) over running as cum_payout_option
+    from spine
+    left join market_daily
+        using (market_id, bet_date)
+    left join ${ref("fct_option_daily")} as option_daily
+        using (option_id, bet_date)
+    window running as (
+        partition by spine.option_id
+        order by spine.bet_date
+        rows between unbounded preceding and current row
+    )
+)
+
+select
+    cumulative.market_id,
+    cumulative.option_id,
+    cumulative.option_name,
+    cumulative.bet_date,
+    cumulative.cum_stake_market,
+    cumulative.cum_payout_option,
+    cumulative.cum_stake_market - cumulative.cum_payout_option as cum_earnings_if_realised,
+    cumulative.is_actual_outcome,
+    markets.is_settled
+from cumulative
+inner join ${ref("dim_market")} as markets
+    using (market_id)

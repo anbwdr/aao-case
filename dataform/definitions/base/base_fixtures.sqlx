@@ -1,0 +1,25 @@
+config {
+  type: "view",
+  schema: constants.dataset("base"),
+  description: "Fixtures, latest version per id, typed.",
+  columns: {
+    fixture_id: "Fixture id",
+    location: "Stadium",
+    home_team: "Home team (case naming)",
+    away_team: "Away team (case naming)",
+    starting_time: "Official kickoff (local time, as in the source)",
+  },
+  assertions: {
+    uniqueKey: ["fixture_id"],
+    nonNull: ["fixture_id", "home_team", "away_team", "starting_time"],
+  },
+}
+
+select
+    cast(id as int64) as fixture_id,
+    location,
+    home_team,
+    away_team,
+    cast(starting_time as datetime) as starting_time
+from ${ref("raw", "fixtures")}
+${sql.latestPerKey("id")}

@@ -1,0 +1,26 @@
+config {
+  type: "table",
+  schema: constants.dataset("analytics"),
+  description: "Stakes and potential payouts per option and bet date (sparse: dates with bets only). Feeds the option-cumulative series.",
+  columns: {
+    market_id: "Market",
+    option_id: "Option",
+    bet_date: "Bet date",
+    bet_count: "Bets placed",
+    stake: "Sum of amount",
+    potential_payout: "Sum of odds * amount",
+  },
+  assertions: {
+    uniqueKeys: [["option_id", "bet_date"]],
+  },
+}
+
+select
+    market_id,
+    option_id,
+    bet_date,
+    count(*) as bet_count,
+    sum(amount) as stake,
+    sum(potential_payout) as potential_payout
+from ${ref("fct_bets")}
+group by market_id, option_id, bet_date

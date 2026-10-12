@@ -1,0 +1,15 @@
+config {
+  type: "declaration",
+  schema: "raw",
+  name: "markets",
+  description: "Landed markets.csv. Append-only, all columns STRING.",
+  columns: {
+    id: "Market id",
+    fixture_id: "Fixture id",
+    name: "Market type, e.g. 3-way",
+    result_option_id: "Winning option id; -999 = unsettled. Cross-check only, base derives the result from match_results",
+    _batch_id: "Batch folder name (UTC timestamp, sortable), set by the Workflow",
+    _ingested_at: "Load timestamp, set by the Workflow",
+    _source_file: "gs:// URI of the landed file",
+  }
+}

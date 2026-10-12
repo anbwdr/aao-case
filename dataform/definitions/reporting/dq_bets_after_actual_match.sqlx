@@ -1,0 +1,23 @@
+config {
+  type: "table",
+  schema: constants.dataset("reporting"),
+  description: "Data-quality report, non-blocking (PLAN.md §6): bets placed after the match was actually played. Only possible for rescheduled fixtures. Same-day bets are not flagged: results have dates only. In production this is a past-posting alert to Trading/Risk, not a pipeline failure.",
+  columns: {
+    bet_count: "Bets placed on bet_date",
+    stake: "Stake placed on bet_date",
+  },
+}
+
+select
+    fixtures.fixture_id,
+    fixtures.fixture_label,
+    fixtures.fixture_start_date,
+    fixtures.actual_match_date,
+    bets.bet_date,
+    count(*) as bet_count,
+    sum(bets.amount) as stake
+from ${ref("fct_bets")} as bets
+inner join ${ref("dim_fixture")} as fixtures
+    using (fixture_id)
+where bets.bet_date > fixtures.actual_match_date
+group by 1, 2, 3, 4, 5

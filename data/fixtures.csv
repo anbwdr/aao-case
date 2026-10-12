@@ -1,0 +1,381 @@
+id,location,home_team,away_team,starting_time
+1,Old Trafford,Man Utd,Fulham,2024-08-16 20:00:00
+2,Portman Road,Ipswich,Liverpool,2024-08-17 12:30:00
+3,Emirates Stadium,Arsenal,Wolves,2024-08-17 15:00:00
+4,Goodison Park,Everton,Brighton,2024-08-17 15:00:00
+5,St. James' Park,Newcastle,Southampton,2024-08-17 15:00:00
+6,The City Ground,Nott'm Forest,Bournemouth,2024-08-17 15:00:00
+7,London Stadium,West Ham,Aston Villa,2024-08-17 17:30:00
+8,Gtech Community Stadium,Brentford,Crystal Palace,2024-08-18 14:00:00
+9,Stamford Bridge,Chelsea,Man City,2024-08-18 16:30:00
+10,King Power Stadium,Leicester,Spurs,2024-08-19 20:00:00
+13,American Express Stadium,Brighton,Man Utd,2024-08-24 12:30:00
+14,Selhurst Park,Crystal Palace,West Ham,2024-08-24 15:00:00
+15,Craven Cottage,Fulham,Leicester,2024-08-24 15:00:00
+17,Etihad Stadium,Man City,Ipswich,2024-08-24 15:00:00
+18,St. Mary's Stadium,Southampton,Nott'm Forest,2024-08-24 15:00:00
+19,Tottenham Hotspur Stadium,Spurs,Everton,2024-08-24 15:00:00
+11,Villa Park,Aston Villa,Arsenal,2024-08-24 17:30:00
+12,Vitality Stadium,Bournemouth,Newcastle,2024-08-25 14:00:00
+20,Molineux Stadium,Wolves,Chelsea,2024-08-25 14:00:00
+16,Anfield,Liverpool,Brentford,2024-08-25 16:30:00
+21,Emirates Stadium,Arsenal,Brighton,2024-08-31 12:30:00
+22,Gtech Community Stadium,Brentford,Southampton,2024-08-31 15:00:00
+24,Goodison Park,Everton,Bournemouth,2024-08-31 15:00:00
+25,Portman Road,Ipswich,Fulham,2024-08-31 15:00:00
+26,King Power Stadium,Leicester,Aston Villa,2024-08-31 15:00:00
+29,The City Ground,Nott'm Forest,Wolves,2024-08-31 15:00:00
+30,London Stadium,West Ham,Man City,2024-08-31 17:30:00
+23,Stamford Bridge,Chelsea,Crystal Palace,2024-09-01 13:30:00
+28,St. James' Park,Newcastle,Spurs,2024-09-01 13:30:00
+27,Old Trafford,Man Utd,Liverpool,2024-09-01 16:00:00
+38,St. Mary's Stadium,Southampton,Man Utd,2024-09-14 12:30:00
+33,American Express Stadium,Brighton,Ipswich,2024-09-14 15:00:00
+34,Selhurst Park,Crystal Palace,Leicester,2024-09-14 15:00:00
+35,Craven Cottage,Fulham,West Ham,2024-09-14 15:00:00
+36,Anfield,Liverpool,Nott'm Forest,2024-09-14 15:00:00
+37,Etihad Stadium,Man City,Brentford,2024-09-14 15:00:00
+31,Villa Park,Aston Villa,Everton,2024-09-14 17:30:00
+32,Vitality Stadium,Bournemouth,Chelsea,2024-09-14 20:00:00
+39,Tottenham Hotspur Stadium,Spurs,Arsenal,2024-09-15 14:00:00
+40,Molineux Stadium,Wolves,Newcastle,2024-09-15 16:30:00
+50,London Stadium,West Ham,Chelsea,2024-09-21 12:30:00
+41,Villa Park,Aston Villa,Wolves,2024-09-21 15:00:00
+44,Craven Cottage,Fulham,Newcastle,2024-09-21 15:00:00
+45,King Power Stadium,Leicester,Everton,2024-09-21 15:00:00
+46,Anfield,Liverpool,Bournemouth,2024-09-21 15:00:00
+48,St. Mary's Stadium,Southampton,Ipswich,2024-09-21 15:00:00
+49,Tottenham Hotspur Stadium,Spurs,Brentford,2024-09-21 15:00:00
+43,Selhurst Park,Crystal Palace,Man Utd,2024-09-21 17:30:00
+42,American Express Stadium,Brighton,Nott'm Forest,2024-09-22 14:00:00
+47,Etihad Stadium,Man City,Arsenal,2024-09-22 16:30:00
+58,St. James' Park,Newcastle,Man City,2024-09-28 12:30:00
+51,Emirates Stadium,Arsenal,Leicester,2024-09-28 15:00:00
+53,Gtech Community Stadium,Brentford,West Ham,2024-09-28 15:00:00
+54,Stamford Bridge,Chelsea,Brighton,2024-09-28 15:00:00
+55,Goodison Park,Everton,Crystal Palace,2024-09-28 15:00:00
+59,The City Ground,Nott'm Forest,Fulham,2024-09-28 15:00:00
+60,Molineux Stadium,Wolves,Liverpool,2024-09-28 17:30:00
+56,Portman Road,Ipswich,Aston Villa,2024-09-29 14:00:00
+57,Old Trafford,Man Utd,Spurs,2024-09-29 16:30:00
+52,Vitality Stadium,Bournemouth,Southampton,2024-09-30 20:00:00
+66,Selhurst Park,Crystal Palace,Liverpool,2024-10-05 12:30:00
+61,Emirates Stadium,Arsenal,Southampton,2024-10-05 15:00:00
+63,Gtech Community Stadium,Brentford,Wolves,2024-10-05 15:00:00
+68,King Power Stadium,Leicester,Bournemouth,2024-10-05 15:00:00
+69,Etihad Stadium,Man City,Fulham,2024-10-05 15:00:00
+70,London Stadium,West Ham,Ipswich,2024-10-05 15:00:00
+67,Goodison Park,Everton,Newcastle,2024-10-05 17:30:00
+62,Villa Park,Aston Villa,Man Utd,2024-10-06 14:00:00
+65,Stamford Bridge,Chelsea,Nott'm Forest,2024-10-06 14:00:00
+64,American Express Stadium,Brighton,Spurs,2024-10-06 16:30:00
+79,Tottenham Hotspur Stadium,Spurs,West Ham,2024-10-19 12:30:00
+72,Craven Cottage,Fulham,Aston Villa,2024-10-19 15:00:00
+73,Portman Road,Ipswich,Everton,2024-10-19 15:00:00
+75,Old Trafford,Man Utd,Brentford,2024-10-19 15:00:00
+76,St. James' Park,Newcastle,Brighton,2024-10-19 15:00:00
+78,St. Mary's Stadium,Southampton,Leicester,2024-10-19 15:00:00
+71,Vitality Stadium,Bournemouth,Arsenal,2024-10-19 17:30:00
+80,Molineux Stadium,Wolves,Man City,2024-10-20 14:00:00
+74,Anfield,Liverpool,Chelsea,2024-10-20 16:30:00
+77,The City Ground,Nott'm Forest,Crystal Palace,2024-10-21 20:00:00
+88,King Power Stadium,Leicester,Nott'm Forest,2024-10-25 20:00:00
+82,Villa Park,Aston Villa,Bournemouth,2024-10-26 15:00:00
+83,Gtech Community Stadium,Brentford,Ipswich,2024-10-26 15:00:00
+84,American Express Stadium,Brighton,Wolves,2024-10-26 15:00:00
+89,Etihad Stadium,Man City,Southampton,2024-10-26 15:00:00
+87,Goodison Park,Everton,Fulham,2024-10-26 17:30:00
+85,Stamford Bridge,Chelsea,Newcastle,2024-10-27 14:00:00
+86,Selhurst Park,Crystal Palace,Spurs,2024-10-27 14:00:00
+90,London Stadium,West Ham,Man Utd,2024-10-27 14:00:00
+81,Emirates Stadium,Arsenal,Liverpool,2024-10-27 16:30:00
+96,St. James' Park,Newcastle,Arsenal,2024-11-02 12:30:00
+91,Vitality Stadium,Bournemouth,Man City,2024-11-02 15:00:00
+93,Portman Road,Ipswich,Leicester,2024-11-02 15:00:00
+94,Anfield,Liverpool,Brighton,2024-11-02 15:00:00
+97,The City Ground,Nott'm Forest,West Ham,2024-11-02 15:00:00
+98,St. Mary's Stadium,Southampton,Everton,2024-11-02 15:00:00
+100,Molineux Stadium,Wolves,Crystal Palace,2024-11-02 17:30:00
+99,Tottenham Hotspur Stadium,Spurs,Aston Villa,2024-11-03 14:00:00
+95,Old Trafford,Man Utd,Chelsea,2024-11-03 16:30:00
+92,Craven Cottage,Fulham,Brentford,2024-11-04 20:00:00
+101,Gtech Community Stadium,Brentford,Bournemouth,2024-11-09 15:00:00
+104,Selhurst Park,Crystal Palace,Fulham,2024-11-09 15:00:00
+109,London Stadium,West Ham,Everton,2024-11-09 15:00:00
+110,Molineux Stadium,Wolves,Southampton,2024-11-09 15:00:00
+102,American Express Stadium,Brighton,Man City,2024-11-09 17:30:00
+105,Anfield,Liverpool,Aston Villa,2024-11-09 20:00:00
+106,Old Trafford,Man Utd,Leicester,2024-11-10 14:00:00
+107,The City Ground,Nott'm Forest,Newcastle,2024-11-10 14:00:00
+108,Tottenham Hotspur Stadium,Spurs,Ipswich,2024-11-10 14:00:00
+103,Stamford Bridge,Chelsea,Arsenal,2024-11-10 16:30:00
+117,King Power Stadium,Leicester,Chelsea,2024-11-23 12:30:00
+111,Emirates Stadium,Arsenal,Nott'm Forest,2024-11-23 15:00:00
+112,Villa Park,Aston Villa,Crystal Palace,2024-11-23 15:00:00
+113,Vitality Stadium,Bournemouth,Brighton,2024-11-23 15:00:00
+114,Goodison Park,Everton,Brentford,2024-11-23 15:00:00
+115,Craven Cottage,Fulham,Wolves,2024-11-23 15:00:00
+118,Etihad Stadium,Man City,Spurs,2024-11-23 17:30:00
+120,St. Mary's Stadium,Southampton,Liverpool,2024-11-24 14:00:00
+116,Portman Road,Ipswich,Man Utd,2024-11-24 16:30:00
+119,St. James' Park,Newcastle,West Ham,2024-11-25 20:00:00
+122,American Express Stadium,Brighton,Southampton,2024-11-29 20:00:00
+121,Gtech Community Stadium,Brentford,Leicester,2024-11-30 15:00:00
+124,Selhurst Park,Crystal Palace,Newcastle,2024-11-30 15:00:00
+127,The City Ground,Nott'm Forest,Ipswich,2024-11-30 15:00:00
+130,Molineux Stadium,Wolves,Bournemouth,2024-11-30 15:00:00
+129,London Stadium,West Ham,Arsenal,2024-11-30 17:30:00
+123,Stamford Bridge,Chelsea,Aston Villa,2024-12-01 13:30:00
+126,Old Trafford,Man Utd,Everton,2024-12-01 13:30:00
+128,Tottenham Hotspur Stadium,Spurs,Fulham,2024-12-01 13:30:00
+125,Anfield,Liverpool,Man City,2024-12-01 16:00:00
+131,Emirates Stadium,Arsenal,Man Utd,2024-12-03 19:45:00
+132,Villa Park,Aston Villa,Brentford,2024-12-03 19:45:00
+133,Vitality Stadium,Bournemouth,Spurs,2024-12-03 19:45:00
+134,Goodison Park,Everton,Wolves,2024-12-03 19:45:00
+135,Craven Cottage,Fulham,Brighton,2024-12-03 19:45:00
+136,Portman Road,Ipswich,Crystal Palace,2024-12-03 19:45:00
+137,King Power Stadium,Leicester,West Ham,2024-12-03 19:45:00
+138,Etihad Stadium,Man City,Nott'm Forest,2024-12-04 19:45:00
+139,St. James' Park,Newcastle,Liverpool,2024-12-04 19:45:00
+140,St. Mary's Stadium,Southampton,Chelsea,2024-12-04 19:45:00
+141,Villa Park,Aston Villa,Southampton,2024-12-07 15:00:00
+142,Gtech Community Stadium,Brentford,Newcastle,2024-12-07 15:00:00
+143,Selhurst Park,Crystal Palace,Man City,2024-12-07 15:00:00
+144,Goodison Park,Everton,Liverpool,2024-12-07 15:00:00
+145,Craven Cottage,Fulham,Arsenal,2024-12-07 15:00:00
+146,Portman Road,Ipswich,Bournemouth,2024-12-07 15:00:00
+147,King Power Stadium,Leicester,Brighton,2024-12-07 15:00:00
+148,Old Trafford,Man Utd,Nott'm Forest,2024-12-07 15:00:00
+149,Tottenham Hotspur Stadium,Spurs,Chelsea,2024-12-07 15:00:00
+150,London Stadium,West Ham,Wolves,2024-12-07 15:00:00
+151,Emirates Stadium,Arsenal,Everton,2024-12-14 15:00:00
+152,Vitality Stadium,Bournemouth,West Ham,2024-12-14 15:00:00
+153,American Express Stadium,Brighton,Crystal Palace,2024-12-14 15:00:00
+154,Stamford Bridge,Chelsea,Brentford,2024-12-14 15:00:00
+155,Anfield,Liverpool,Fulham,2024-12-14 15:00:00
+156,Etihad Stadium,Man City,Man Utd,2024-12-14 15:00:00
+157,St. James' Park,Newcastle,Leicester,2024-12-14 15:00:00
+158,The City Ground,Nott'm Forest,Aston Villa,2024-12-14 15:00:00
+159,St. Mary's Stadium,Southampton,Spurs,2024-12-14 15:00:00
+160,Molineux Stadium,Wolves,Ipswich,2024-12-14 15:00:00
+161,Villa Park,Aston Villa,Man City,2024-12-21 15:00:00
+162,Gtech Community Stadium,Brentford,Nott'm Forest,2024-12-21 15:00:00
+163,Selhurst Park,Crystal Palace,Arsenal,2024-12-21 15:00:00
+164,Goodison Park,Everton,Chelsea,2024-12-21 15:00:00
+165,Craven Cottage,Fulham,Southampton,2024-12-21 15:00:00
+166,Portman Road,Ipswich,Newcastle,2024-12-21 15:00:00
+167,King Power Stadium,Leicester,Wolves,2024-12-21 15:00:00
+168,Old Trafford,Man Utd,Bournemouth,2024-12-21 15:00:00
+169,Tottenham Hotspur Stadium,Spurs,Liverpool,2024-12-21 15:00:00
+170,London Stadium,West Ham,Brighton,2024-12-21 15:00:00
+171,Emirates Stadium,Arsenal,Ipswich,2024-12-26 15:00:00
+172,Vitality Stadium,Bournemouth,Crystal Palace,2024-12-26 15:00:00
+173,American Express Stadium,Brighton,Brentford,2024-12-26 15:00:00
+174,Stamford Bridge,Chelsea,Fulham,2024-12-26 15:00:00
+175,Anfield,Liverpool,Leicester,2024-12-26 15:00:00
+176,Etihad Stadium,Man City,Everton,2024-12-26 15:00:00
+177,St. James' Park,Newcastle,Aston Villa,2024-12-26 15:00:00
+178,The City Ground,Nott'm Forest,Spurs,2024-12-26 15:00:00
+179,St. Mary's Stadium,Southampton,West Ham,2024-12-26 15:00:00
+180,Molineux Stadium,Wolves,Man Utd,2024-12-26 15:00:00
+181,Villa Park,Aston Villa,Brighton,2024-12-29 15:00:00
+182,Gtech Community Stadium,Brentford,Arsenal,2024-12-29 15:00:00
+183,Selhurst Park,Crystal Palace,Southampton,2024-12-29 15:00:00
+184,Goodison Park,Everton,Nott'm Forest,2024-12-29 15:00:00
+185,Craven Cottage,Fulham,Bournemouth,2024-12-29 15:00:00
+186,Portman Road,Ipswich,Chelsea,2024-12-29 15:00:00
+187,King Power Stadium,Leicester,Man City,2024-12-29 15:00:00
+188,Old Trafford,Man Utd,Newcastle,2024-12-29 15:00:00
+189,Tottenham Hotspur Stadium,Spurs,Wolves,2024-12-29 15:00:00
+190,London Stadium,West Ham,Liverpool,2024-12-29 15:00:00
+191,Villa Park,Aston Villa,Leicester,2025-01-04 15:00:00
+192,Vitality Stadium,Bournemouth,Everton,2025-01-04 15:00:00
+193,American Express Stadium,Brighton,Arsenal,2025-01-04 15:00:00
+194,Selhurst Park,Crystal Palace,Chelsea,2025-01-04 15:00:00
+195,Craven Cottage,Fulham,Ipswich,2025-01-04 15:00:00
+196,Anfield,Liverpool,Man Utd,2025-01-04 15:00:00
+197,Etihad Stadium,Man City,West Ham,2025-01-04 15:00:00
+198,St. Mary's Stadium,Southampton,Brentford,2025-01-04 15:00:00
+199,Tottenham Hotspur Stadium,Spurs,Newcastle,2025-01-04 15:00:00
+200,Molineux Stadium,Wolves,Nott'm Forest,2025-01-04 15:00:00
+201,Emirates Stadium,Arsenal,Spurs,2025-01-14 19:45:00
+202,Gtech Community Stadium,Brentford,Man City,2025-01-14 19:45:00
+203,Goodison Park,Everton,Aston Villa,2025-01-14 19:45:00
+204,Portman Road,Ipswich,Brighton,2025-01-14 19:45:00
+205,King Power Stadium,Leicester,Crystal Palace,2025-01-14 19:45:00
+206,The City Ground,Nott'm Forest,Liverpool,2025-01-14 19:45:00
+207,London Stadium,West Ham,Fulham,2025-01-14 19:45:00
+208,Stamford Bridge,Chelsea,Bournemouth,2025-01-15 19:45:00
+209,St. James' Park,Newcastle,Wolves,2025-01-15 19:45:00
+210,Old Trafford,Man Utd,Southampton,2025-01-15 20:00:00
+211,Emirates Stadium,Arsenal,Aston Villa,2025-01-18 15:00:00
+212,Gtech Community Stadium,Brentford,Liverpool,2025-01-18 15:00:00
+213,Stamford Bridge,Chelsea,Wolves,2025-01-18 15:00:00
+214,Goodison Park,Everton,Spurs,2025-01-18 15:00:00
+215,Portman Road,Ipswich,Man City,2025-01-18 15:00:00
+216,King Power Stadium,Leicester,Fulham,2025-01-18 15:00:00
+217,Old Trafford,Man Utd,Brighton,2025-01-18 15:00:00
+218,St. James' Park,Newcastle,Bournemouth,2025-01-18 15:00:00
+219,The City Ground,Nott'm Forest,Southampton,2025-01-18 15:00:00
+220,London Stadium,West Ham,Crystal Palace,2025-01-18 15:00:00
+221,Villa Park,Aston Villa,West Ham,2025-01-25 15:00:00
+222,Vitality Stadium,Bournemouth,Nott'm Forest,2025-01-25 15:00:00
+223,American Express Stadium,Brighton,Everton,2025-01-25 15:00:00
+224,Selhurst Park,Crystal Palace,Brentford,2025-01-25 15:00:00
+225,Craven Cottage,Fulham,Man Utd,2025-01-25 15:00:00
+226,Anfield,Liverpool,Ipswich,2025-01-25 15:00:00
+227,Etihad Stadium,Man City,Chelsea,2025-01-25 15:00:00
+228,St. Mary's Stadium,Southampton,Newcastle,2025-01-25 15:00:00
+229,Tottenham Hotspur Stadium,Spurs,Leicester,2025-01-25 15:00:00
+230,Molineux Stadium,Wolves,Arsenal,2025-01-25 15:00:00
+231,Emirates Stadium,Arsenal,Man City,2025-02-01 15:00:00
+232,Vitality Stadium,Bournemouth,Liverpool,2025-02-01 15:00:00
+233,Gtech Community Stadium,Brentford,Spurs,2025-02-01 15:00:00
+234,Stamford Bridge,Chelsea,West Ham,2025-02-01 15:00:00
+235,Goodison Park,Everton,Leicester,2025-02-01 15:00:00
+236,Portman Road,Ipswich,Southampton,2025-02-01 15:00:00
+237,Old Trafford,Man Utd,Crystal Palace,2025-02-01 15:00:00
+238,St. James' Park,Newcastle,Fulham,2025-02-01 15:00:00
+239,The City Ground,Nott'm Forest,Brighton,2025-02-01 15:00:00
+240,Molineux Stadium,Wolves,Aston Villa,2025-02-01 15:00:00
+241,Villa Park,Aston Villa,Ipswich,2025-02-15 15:00:00
+242,American Express Stadium,Brighton,Chelsea,2025-02-15 15:00:00
+243,Selhurst Park,Crystal Palace,Everton,2025-02-15 15:00:00
+244,Craven Cottage,Fulham,Nott'm Forest,2025-02-15 15:00:00
+245,King Power Stadium,Leicester,Arsenal,2025-02-15 15:00:00
+246,Anfield,Liverpool,Wolves,2025-02-15 15:00:00
+247,Etihad Stadium,Man City,Newcastle,2025-02-15 15:00:00
+248,St. Mary's Stadium,Southampton,Bournemouth,2025-02-15 15:00:00
+249,Tottenham Hotspur Stadium,Spurs,Man Utd,2025-02-15 15:00:00
+250,London Stadium,West Ham,Brentford,2025-02-15 15:00:00
+251,Emirates Stadium,Arsenal,West Ham,2025-02-22 15:00:00
+252,Villa Park,Aston Villa,Chelsea,2025-02-22 15:00:00
+253,Vitality Stadium,Bournemouth,Wolves,2025-02-22 15:00:00
+254,Goodison Park,Everton,Man Utd,2025-02-22 15:00:00
+255,Craven Cottage,Fulham,Crystal Palace,2025-02-22 15:00:00
+256,Portman Road,Ipswich,Spurs,2025-02-22 15:00:00
+257,King Power Stadium,Leicester,Brentford,2025-02-22 15:00:00
+258,Etihad Stadium,Man City,Liverpool,2025-02-22 15:00:00
+259,St. James' Park,Newcastle,Nott'm Forest,2025-02-22 15:00:00
+260,St. Mary's Stadium,Southampton,Brighton,2025-02-22 15:00:00
+261,Gtech Community Stadium,Brentford,Everton,2025-02-25 19:45:00
+262,American Express Stadium,Brighton,Bournemouth,2025-02-25 19:45:00
+263,The City Ground,Nott'm Forest,Arsenal,2025-02-25 19:45:00
+264,Tottenham Hotspur Stadium,Spurs,Man City,2025-02-25 19:45:00
+265,London Stadium,West Ham,Leicester,2025-02-25 19:45:00
+266,Molineux Stadium,Wolves,Fulham,2025-02-25 19:45:00
+267,Selhurst Park,Crystal Palace,Aston Villa,2025-02-25 20:00:00
+268,Stamford Bridge,Chelsea,Southampton,2025-02-26 19:45:00
+269,Anfield,Liverpool,Newcastle,2025-02-26 20:00:00
+270,Old Trafford,Man Utd,Ipswich,2025-02-26 20:00:00
+271,Gtech Community Stadium,Brentford,Aston Villa,2025-03-08 15:00:00
+272,American Express Stadium,Brighton,Fulham,2025-03-08 15:00:00
+273,Stamford Bridge,Chelsea,Leicester,2025-03-08 15:00:00
+274,Selhurst Park,Crystal Palace,Ipswich,2025-03-08 15:00:00
+275,Anfield,Liverpool,Southampton,2025-03-08 15:00:00
+276,Old Trafford,Man Utd,Arsenal,2025-03-08 15:00:00
+277,The City Ground,Nott'm Forest,Man City,2025-03-08 15:00:00
+278,Tottenham Hotspur Stadium,Spurs,Bournemouth,2025-03-08 15:00:00
+279,London Stadium,West Ham,Newcastle,2025-03-08 15:00:00
+280,Molineux Stadium,Wolves,Everton,2025-03-08 15:00:00
+281,Emirates Stadium,Arsenal,Chelsea,2025-03-15 15:00:00
+282,Villa Park,Aston Villa,Liverpool,2025-03-15 15:00:00
+283,Vitality Stadium,Bournemouth,Brentford,2025-03-15 15:00:00
+284,Goodison Park,Everton,West Ham,2025-03-15 15:00:00
+285,Craven Cottage,Fulham,Spurs,2025-03-15 15:00:00
+286,Portman Road,Ipswich,Nott'm Forest,2025-03-15 15:00:00
+287,King Power Stadium,Leicester,Man Utd,2025-03-15 15:00:00
+288,Etihad Stadium,Man City,Brighton,2025-03-15 15:00:00
+289,St. James' Park,Newcastle,Crystal Palace,2025-03-15 15:00:00
+290,St. Mary's Stadium,Southampton,Wolves,2025-03-15 15:00:00
+291,Emirates Stadium,Arsenal,Fulham,2025-04-01 19:45:00
+292,Vitality Stadium,Bournemouth,Ipswich,2025-04-01 19:45:00
+293,American Express Stadium,Brighton,Aston Villa,2025-04-01 19:45:00
+294,The City Ground,Nott'm Forest,Man Utd,2025-04-01 19:45:00
+295,Molineux Stadium,Wolves,West Ham,2025-04-01 19:45:00
+296,Stamford Bridge,Chelsea,Spurs,2025-04-02 19:45:00
+297,Etihad Stadium,Man City,Leicester,2025-04-02 19:45:00
+298,St. James' Park,Newcastle,Brentford,2025-04-02 19:45:00
+299,St. Mary's Stadium,Southampton,Crystal Palace,2025-04-02 19:45:00
+300,Anfield,Liverpool,Everton,2025-04-02 20:00:00
+301,Villa Park,Aston Villa,Nott'm Forest,2025-04-05 15:00:00
+302,Gtech Community Stadium,Brentford,Chelsea,2025-04-05 15:00:00
+303,Selhurst Park,Crystal Palace,Brighton,2025-04-05 15:00:00
+304,Goodison Park,Everton,Arsenal,2025-04-05 15:00:00
+305,Craven Cottage,Fulham,Liverpool,2025-04-05 15:00:00
+306,Portman Road,Ipswich,Wolves,2025-04-05 15:00:00
+307,King Power Stadium,Leicester,Newcastle,2025-04-05 15:00:00
+308,Old Trafford,Man Utd,Man City,2025-04-05 15:00:00
+309,Tottenham Hotspur Stadium,Spurs,Southampton,2025-04-05 15:00:00
+310,London Stadium,West Ham,Bournemouth,2025-04-05 15:00:00
+311,Emirates Stadium,Arsenal,Brentford,2025-04-12 15:00:00
+312,Vitality Stadium,Bournemouth,Fulham,2025-04-12 15:00:00
+313,American Express Stadium,Brighton,Leicester,2025-04-12 15:00:00
+314,Stamford Bridge,Chelsea,Ipswich,2025-04-12 15:00:00
+315,Anfield,Liverpool,West Ham,2025-04-12 15:00:00
+316,Etihad Stadium,Man City,Crystal Palace,2025-04-12 15:00:00
+317,St. James' Park,Newcastle,Man Utd,2025-04-12 15:00:00
+318,The City Ground,Nott'm Forest,Everton,2025-04-12 15:00:00
+319,St. Mary's Stadium,Southampton,Aston Villa,2025-04-12 15:00:00
+320,Molineux Stadium,Wolves,Spurs,2025-04-12 15:00:00
+321,Villa Park,Aston Villa,Newcastle,2025-04-19 15:00:00
+322,Gtech Community Stadium,Brentford,Brighton,2025-04-19 15:00:00
+323,Selhurst Park,Crystal Palace,Bournemouth,2025-04-19 15:00:00
+324,Goodison Park,Everton,Man City,2025-04-19 15:00:00
+325,Craven Cottage,Fulham,Chelsea,2025-04-19 15:00:00
+326,Portman Road,Ipswich,Arsenal,2025-04-19 15:00:00
+327,King Power Stadium,Leicester,Liverpool,2025-04-19 15:00:00
+328,Old Trafford,Man Utd,Wolves,2025-04-19 15:00:00
+329,Tottenham Hotspur Stadium,Spurs,Nott'm Forest,2025-04-19 15:00:00
+330,London Stadium,West Ham,Southampton,2025-04-19 15:00:00
+331,Emirates Stadium,Arsenal,Crystal Palace,2025-04-26 15:00:00
+332,Vitality Stadium,Bournemouth,Man Utd,2025-04-26 15:00:00
+333,American Express Stadium,Brighton,West Ham,2025-04-26 15:00:00
+334,Stamford Bridge,Chelsea,Everton,2025-04-26 15:00:00
+335,Anfield,Liverpool,Spurs,2025-04-26 15:00:00
+336,Etihad Stadium,Man City,Aston Villa,2025-04-26 15:00:00
+337,St. James' Park,Newcastle,Ipswich,2025-04-26 15:00:00
+338,The City Ground,Nott'm Forest,Brentford,2025-04-26 15:00:00
+339,St. Mary's Stadium,Southampton,Fulham,2025-04-26 15:00:00
+340,Molineux Stadium,Wolves,Leicester,2025-04-26 15:00:00
+341,Emirates Stadium,Arsenal,Bournemouth,2025-05-03 15:00:00
+342,Villa Park,Aston Villa,Fulham,2025-05-03 15:00:00
+343,Gtech Community Stadium,Brentford,Man Utd,2025-05-03 15:00:00
+344,American Express Stadium,Brighton,Newcastle,2025-05-03 15:00:00
+345,Stamford Bridge,Chelsea,Liverpool,2025-05-03 15:00:00
+346,Selhurst Park,Crystal Palace,Nott'm Forest,2025-05-03 15:00:00
+347,Goodison Park,Everton,Ipswich,2025-05-03 15:00:00
+348,King Power Stadium,Leicester,Southampton,2025-05-03 15:00:00
+349,Etihad Stadium,Man City,Wolves,2025-05-03 15:00:00
+350,London Stadium,West Ham,Spurs,2025-05-03 15:00:00
+351,Vitality Stadium,Bournemouth,Aston Villa,2025-05-10 15:00:00
+352,Craven Cottage,Fulham,Everton,2025-05-10 15:00:00
+353,Portman Road,Ipswich,Brentford,2025-05-10 15:00:00
+354,Anfield,Liverpool,Arsenal,2025-05-10 15:00:00
+355,Old Trafford,Man Utd,West Ham,2025-05-10 15:00:00
+356,St. James' Park,Newcastle,Chelsea,2025-05-10 15:00:00
+357,The City Ground,Nott'm Forest,Leicester,2025-05-10 15:00:00
+358,St. Mary's Stadium,Southampton,Man City,2025-05-10 15:00:00
+359,Tottenham Hotspur Stadium,Spurs,Crystal Palace,2025-05-10 15:00:00
+360,Molineux Stadium,Wolves,Brighton,2025-05-10 15:00:00
+361,Emirates Stadium,Arsenal,Newcastle,2025-05-18 15:00:00
+362,Villa Park,Aston Villa,Spurs,2025-05-18 15:00:00
+363,Gtech Community Stadium,Brentford,Fulham,2025-05-18 15:00:00
+364,American Express Stadium,Brighton,Liverpool,2025-05-18 15:00:00
+365,Stamford Bridge,Chelsea,Man Utd,2025-05-18 15:00:00
+366,Selhurst Park,Crystal Palace,Wolves,2025-05-18 15:00:00
+367,Goodison Park,Everton,Southampton,2025-05-18 15:00:00
+368,King Power Stadium,Leicester,Ipswich,2025-05-18 15:00:00
+369,Etihad Stadium,Man City,Bournemouth,2025-05-18 15:00:00
+370,London Stadium,West Ham,Nott'm Forest,2025-05-18 15:00:00
+371,Vitality Stadium,Bournemouth,Leicester,2025-05-25 16:00:00
+372,Craven Cottage,Fulham,Man City,2025-05-25 16:00:00
+373,Portman Road,Ipswich,West Ham,2025-05-25 16:00:00
+374,Anfield,Liverpool,Crystal Palace,2025-05-25 16:00:00
+375,Old Trafford,Man Utd,Aston Villa,2025-05-25 16:00:00
+376,St. James' Park,Newcastle,Everton,2025-05-25 16:00:00
+377,The City Ground,Nott'm Forest,Chelsea,2025-05-25 16:00:00
+378,St. Mary's Stadium,Southampton,Arsenal,2025-05-25 16:00:00
+379,Tottenham Hotspur Stadium,Spurs,Brighton,2025-05-25 16:00:00
+380,Molineux Stadium,Wolves,Brentford,2025-05-25 16:00:00

@@ -1,0 +1,85 @@
+// AAO semantic model over the analytics marts (PLAN.md §4).
+// KPI logic lives once, in Dataform. Measures here are thin sums of fct_market columns,
+// so Malloy, the reporting tables and the dashboard can never disagree.
+// The connection is called "bigquery" in every environment (malloy/check.mjs maps it to DuckDB).
+
+source: fixtures is bigquery.table('analytics.dim_fixture') extend {
+  primary_key: fixture_id
+}
+
+source: market_types is bigquery.table('analytics.dim_market') extend {
+  primary_key: market_id
+}
+
+source: options is bigquery.table('analytics.dim_option') extend {
+  primary_key: option_id
+}
+
+// One row per market. Status-specific columns are NULL when they do not apply, and
+// sums skip NULLs, so every measure below is a plain sum.
+source: markets is bigquery.table('analytics.fct_market') extend {
+  primary_key: market_id
+  rename:
+    stake_amount is total_stake
+    settled_stake_amount is settled_stake
+    settled_earnings_amount is settled_earnings
+    open_bets_amount is open_bets
+    worst_case_amount is worst_case
+    best_case_amount is best_case
+
+  join_one: fixture is fixtures on fixture_id = fixture.fixture_id
+  join_one: market_type is market_types on market_id = market_type.market_id
+
+  measure:
+    market_count is count()
+    stake is stake_amount.sum()
+    settled_stake is settled_stake_amount.sum()
+    # percent
+    settled_margin is settled_earnings_amount.sum() / settled_stake_amount.sum()
+    settled_earnings is settled_earnings_amount.sum()
+    open_bets is open_bets_amount.sum()
+    // Valid while markets on one fixture are independent (PLAN.md §10).
+    worst_case_future is worst_case_amount.sum()
+    best_case_future is best_case_amount.sum()
+
+  // T4: KPI tiles.
+  view: kpi_totals is {
+    aggregate: settled_earnings, settled_stake, settled_margin, open_bets, worst_case_future, best_case_future
+  }
+
+  // T1 + T5: by fixture starting date.
+  # line_chart
+  view: by_fixture_date is {
+    group_by: fixture.fixture_start_date
+    aggregate: settled_earnings, settled_margin, worst_case_future, best_case_future
+    order_by: fixture_start_date
+  }
+
+  // T1: per fixture.
+  view: by_fixture is {
+    group_by: fixture.fixture_label, fixture.fixture_start_date
+    aggregate: stake, settled_earnings, settled_margin, open_bets, worst_case_future, best_case_future
+    order_by: fixture_start_date
+  }
+
+  // T6: the grain is market, so more market types just add rows.
+  view: by_market_type is {
+    group_by: market_type.market_name
+    aggregate: market_count, stake, settled_earnings, open_bets, worst_case_future, best_case_future
+  }
+}
+
+// One row per market and option: AAO earnings if that option is the result (T2 end points).
+source: outcomes is bigquery.table('analytics.fct_market_outcome') extend {
+  primary_key: option_id
+  join_one: option is options on option_id = option.option_id
+  join_one: market_type is market_types on market_id = market_type.market_id
+
+  measure: earnings_if_realised_total is earnings_if_realised.sum()
+
+  view: by_option is {
+    group_by: market_id, option.option_name, is_actual_outcome
+    aggregate: earnings_if_realised_total
+    order_by: market_id, option_name
+  }
+}

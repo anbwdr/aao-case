@@ -1,0 +1,29 @@
+config {
+  type: "table",
+  schema: constants.dataset("analytics"),
+  description: "Market dimension. Market is the grain of all KPIs, never fixture.",
+  columns: {
+    market_id: "Market id",
+    fixture_id: "Fixture id",
+    market_name: "Market type",
+    is_settled: "True once the result is known",
+    result_option_id: "Winning option (NULL while unsettled)",
+    result_option_name: "Winning option name (NULL while unsettled)",
+    source_result_option_id: "Winning option according to the source system. Cross-check only",
+  },
+  assertions: {
+    uniqueKey: ["market_id"],
+  },
+}
+
+select
+    markets.market_id,
+    markets.fixture_id,
+    markets.market_name,
+    markets.is_settled,
+    markets.result_option_id,
+    result_options.option_name as result_option_name,
+    markets.source_result_option_id
+from ${ref("base_markets")} as markets
+left join ${ref("base_options")} as result_options
+    on markets.result_option_id = result_options.option_id

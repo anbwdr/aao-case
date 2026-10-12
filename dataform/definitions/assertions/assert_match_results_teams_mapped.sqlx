@@ -1,0 +1,21 @@
+config {
+  type: "assertion",
+  description: "Every team name in match_results maps to a fixture team. Lists the offending names so the fix (a row in base_team_name_map) is obvious. Rows are never dropped.",
+}
+
+with fixture_teams as (
+    select home_team as team from ${ref("base_fixtures")}
+    union distinct
+    select away_team from ${ref("base_fixtures")}
+),
+
+result_teams as (
+    select home_team as team from ${ref("base_match_results")}
+    union distinct
+    select away_team from ${ref("base_match_results")}
+)
+
+select result_teams.team as unmapped_team
+from result_teams
+left join fixture_teams using (team)
+where fixture_teams.team is null

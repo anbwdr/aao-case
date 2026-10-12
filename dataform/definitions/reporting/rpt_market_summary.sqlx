@@ -1,0 +1,40 @@
+config {
+  type: "table",
+  schema: constants.dataset("reporting"),
+  description: "One row per market for the Overview page (T1, T5) and the fixture table: analytics.fct_market with its labels. Amounts that do not apply to the market's status are NULL, not 0.",
+  columns: {
+    fixture_label: "Home v Away",
+    fixture_start_date: "Official kickoff date",
+    result_option_name: "Winning option (NULL while open)",
+    total_stake: "All stakes on the market",
+    settled_earnings: "AAO earnings (settled markets)",
+    settled_margin: "settled_earnings / stake (settled markets)",
+    open_bets: "Stake on the market (open markets)",
+    worst_case: "Min over options of earnings if realised (open markets)",
+    best_case: "Max over options of earnings if realised (open markets)",
+  },
+  assertions: {
+    uniqueKey: ["market_id"],
+  },
+}
+
+select
+    markets.market_id,
+    markets.market_name,
+    fixtures.fixture_id,
+    fixtures.fixture_label,
+    fixtures.location,
+    fixtures.fixture_start_date,
+    markets.is_settled,
+    markets.result_option_name,
+    facts.total_stake,
+    facts.settled_earnings,
+    safe_divide(facts.settled_earnings, facts.settled_stake) as settled_margin,
+    facts.open_bets,
+    facts.worst_case,
+    facts.best_case
+from ${ref("fct_market")} as facts
+inner join ${ref("dim_market")} as markets
+    using (market_id)
+inner join ${ref("dim_fixture")} as fixtures
+    on facts.fixture_id = fixtures.fixture_id

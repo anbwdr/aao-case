@@ -1,0 +1,23 @@
+source: aao_dm is duckdb.table('data/bets.csv') extend {
+  join_one: options is duckdb.table('data/options.csv') extend { primary_key: id } on options.id = option_id
+  join_one: markets is duckdb.table('data/markets.csv') extend { primary_key: id } on options.market_id = markets.id
+  join_one: fixtures is duckdb.table('data/fixtures.csv') extend { primary_key: id } on markets.fixture_id = fixtures.id
+  
+  dimension: 
+    settled_bet is 
+      pick -(odds * amount) when option_id = markets.result_option_id
+      pick 0 when markets.result_option_id = -999
+      else (odds * amount)
+
+  measure:
+    settled_earnings is sum(settled_bet)
+    total_bets is sum(amount)// where bets are settled, can also have open bets
+    settled_margin is settled_earnings/total_bets
+  
+  //# bar_chart
+  view: settled_earnings_by_location_and_day is {
+    group_by:
+    `date`.day
+    aggregate: settled_earnings
+  }
+} // market_fk

@@ -1,0 +1,11 @@
+config {
+  type: "declaration",
+  schema: "raw",
+  name: "batch_manifest",
+  description: "One row per landed file, written by the Workflow from _MANIFEST.json before the loads.",
+  columns: {
+    batch_id: "Batch folder name",
+    table_name: "Target raw table",
+    row_count: "Data rows in the file according to the manifest (INT64)",
+  }
+}

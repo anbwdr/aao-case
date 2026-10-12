@@ -1,0 +1,22 @@
+config {
+  type: "assertion",
+  description: "Every landed batch has exactly the row counts its _MANIFEST.json promised. Returns the mismatching (table, batch) pairs.",
+}
+
+with landed as (
+    ${["fixtures", "markets", "options", "bets", "match_results"].map((table) => `
+    select '${table}' as table_name, _batch_id as batch_id, count(*) as landed_rows
+    from ${ref("raw", table)}
+    group by _batch_id`).join("\n    union all")}
+)
+
+select
+    coalesce(manifest.table_name, landed.table_name) as table_name,
+    coalesce(manifest.batch_id, landed.batch_id) as batch_id,
+    manifest.row_count as manifest_rows,
+    landed.landed_rows
+from ${ref("raw", "batch_manifest")} as manifest
+full outer join landed
+    on manifest.table_name = landed.table_name
+    and manifest.batch_id = landed.batch_id
+where manifest.row_count is distinct from landed.landed_rows

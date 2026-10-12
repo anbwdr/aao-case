@@ -1,0 +1,59 @@
+config {
+  type: "view",
+  schema: constants.dataset("base"),
+  description: "Markets with the result derived from match_results. A market is settled once its fixture has a result. The case's own result_option_id is kept as source_result_option_id for the cross-check only.",
+  columns: {
+    market_id: "Market id",
+    fixture_id: "Fixture id",
+    market_name: "Market type: 3-way, Over/Under 2.5",
+    is_settled: "True once the fixture has a result",
+    result_option_id: "Winning option, derived from match_results. NULL while unsettled",
+    source_result_option_id: "Winning option according to the source system (NULL for -999). Cross-check only",
+  },
+  assertions: {
+    uniqueKey: ["market_id"],
+    nonNull: ["market_id", "fixture_id", "market_name", "is_settled"],
+    rowConditions: [
+      // Fails on an unknown market type or a missing option: never settle silently.
+      "is_settled = (result_option_id is not null)",
+    ],
+  },
+}
+
+with markets as (
+    select
+        cast(id as int64) as market_id,
+        cast(fixture_id as int64) as fixture_id,
+        name as market_name,
+        nullif(cast(result_option_id as int64), ${constants.UNSETTLED_RESULT_OPTION_ID}) as source_result_option_id
+    from ${ref("raw", "markets")}
+    ${sql.latestPerKey("id")}
+),
+
+settlement as (
+    select
+        markets.*,
+        results.fixture_id is not null as is_settled,
+        case
+            when results.fixture_id is null then null
+            when markets.market_name = '3-way' then
+                case results.full_time_result when 'H' then '1' when 'D' then 'X' when 'A' then '2' end
+            when markets.market_name = 'Over/Under 2.5' then
+                if(results.home_goals + results.away_goals > 2.5, 'Over', 'Under')
+        end as result_option_name
+    from markets
+    left join ${ref("base_match_results")} as results
+        using (fixture_id)
+)
+
+select
+    settlement.market_id,
+    settlement.fixture_id,
+    settlement.market_name,
+    settlement.is_settled,
+    options.option_id as result_option_id,
+    settlement.source_result_option_id
+from settlement
+left join ${ref("base_options")} as options
+    on settlement.market_id = options.market_id
+    and settlement.result_option_name = options.option_name

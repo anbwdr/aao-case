@@ -1,0 +1,16 @@
+config {
+  type: "declaration",
+  schema: "raw",
+  name: "fixtures",
+  description: "Landed fixtures.csv. Append-only, all columns STRING.",
+  columns: {
+    id: "Fixture id",
+    location: "Stadium",
+    home_team: "Home team (case naming)",
+    away_team: "Away team (case naming)",
+    starting_time: "Official kickoff, YYYY-MM-DD HH:MM:SS",
+    _batch_id: "Batch folder name (UTC timestamp, sortable), set by the Workflow",
+    _ingested_at: "Load timestamp, set by the Workflow",
+    _source_file: "gs:// URI of the landed file",
+  }
+}

@@ -1,0 +1,16 @@
+config {
+  type: "table",
+  schema: constants.dataset("base"),
+  description: "Seed: football-data.co.uk team names that differ from the case's fixture names. Names not listed are identical in both sources. One mapping for every batch.",
+  columns: {
+    source_team_name: "Team name in match_results",
+    fixture_team_name: "Team name in fixtures",
+  },
+  assertions: {
+    uniqueKey: ["source_team_name"],
+  },
+}
+
+select 'Man United' as source_team_name, 'Man Utd' as fixture_team_name
+union all
+select 'Tottenham', 'Spurs'

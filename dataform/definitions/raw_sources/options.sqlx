@@ -1,0 +1,15 @@
+config {
+  type: "declaration",
+  schema: "raw",
+  name: "options",
+  description: "Landed options.csv. Append-only, all columns STRING.",
+  columns: {
+    id: "Option id",
+    market_id: "Market id",
+    name: "Option name: 1, X, 2 (3-way); Over, Under (O/U 2.5)",
+    latest_odds: "Latest offered odds",
+    _batch_id: "Batch folder name (UTC timestamp, sortable), set by the Workflow",
+    _ingested_at: "Load timestamp, set by the Workflow",
+    _source_file: "gs:// URI of the landed file",
+  }
+}

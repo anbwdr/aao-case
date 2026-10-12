@@ -1,0 +1,33 @@
+config {
+  type: "table",
+  schema: constants.dataset("analytics"),
+  description: "Fixture dimension. fixture_start_date is the official (case) date and drives all reporting; actual_match_date is carried for transparency.",
+  columns: {
+    fixture_id: "Fixture id",
+    fixture_label: "Home v Away",
+    home_team: "Home team",
+    away_team: "Away team",
+    location: "Stadium",
+    starting_time: "Official kickoff",
+    fixture_start_date: "Official kickoff date",
+    actual_match_date: "Date actually played (NULL until a result exists)",
+    is_rescheduled: "True when the match was played on another date than scheduled",
+  },
+  assertions: {
+    uniqueKey: ["fixture_id"],
+  },
+}
+
+select
+    fixtures.fixture_id,
+    concat(fixtures.home_team, ' v ', fixtures.away_team) as fixture_label,
+    fixtures.home_team,
+    fixtures.away_team,
+    fixtures.location,
+    fixtures.starting_time,
+    date(fixtures.starting_time) as fixture_start_date,
+    results.actual_match_date,
+    coalesce(results.actual_match_date <> date(fixtures.starting_time), false) as is_rescheduled
+from ${ref("base_fixtures")} as fixtures
+left join ${ref("base_match_results")} as results
+    using (fixture_id)

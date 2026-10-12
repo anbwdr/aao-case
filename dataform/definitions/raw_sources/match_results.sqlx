@@ -1,0 +1,19 @@
+config {
+  type: "declaration",
+  schema: "raw",
+  name: "match_results",
+  description: "Landed match results (football-data.co.uk E0 subset, see ingest/upload.sh). Append-only, all columns STRING.",
+  columns: {
+    Div: "League code (E0)",
+    Date: "Actual match date, DD/MM/YYYY",
+    Time: "Kickoff time",
+    HomeTeam: "Home team (football-data naming)",
+    AwayTeam: "Away team (football-data naming)",
+    FTHG: "Full-time home goals",
+    FTAG: "Full-time away goals",
+    FTR: "Full-time result: H, D, A",
+    _batch_id: "Batch folder name (UTC timestamp, sortable), set by the Workflow",
+    _ingested_at: "Load timestamp, set by the Workflow",
+    _source_file: "gs:// URI of the landed file",
+  }
+}

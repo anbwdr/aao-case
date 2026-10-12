@@ -1,0 +1,10 @@
+# Project id is filled in after infra/wizard.sh; compile works with the placeholder.
+defaultProject: aao-case-project
+defaultLocation: EU
+defaultDataset: analytics
+defaultAssertionDataset: assertions
+dataformCoreVersion: 3.0.71
+vars:
+  # "true" = scenario push (PLAN.md §4.1): reads raw ∪ raw_scenario match results
+  # and writes every layer to <layer>_scenario. Graded datasets are never touched.
+  scenario: "false"

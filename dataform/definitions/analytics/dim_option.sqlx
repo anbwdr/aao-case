@@ -1,0 +1,25 @@
+config {
+  type: "table",
+  schema: constants.dataset("analytics"),
+  description: "Option dimension.",
+  columns: {
+    option_id: "Option id",
+    market_id: "Market id",
+    option_name: "1, X, 2, Over, Under",
+    latest_odds: "Latest offered odds",
+    is_actual_outcome: "True when the market is settled and this option won",
+  },
+  assertions: {
+    uniqueKey: ["option_id"],
+  },
+}
+
+select
+    options.option_id,
+    options.market_id,
+    options.option_name,
+    options.latest_odds,
+    coalesce(options.option_id = markets.result_option_id, false) as is_actual_outcome
+from ${ref("base_options")} as options
+inner join ${ref("base_markets")} as markets
+    using (market_id)
